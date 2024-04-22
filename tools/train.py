@@ -1,14 +1,19 @@
+import sys
+
+sys.path.append("../model/")
+sys.path.append("../dataset/")
+sys.path.append("../scheduler/")
+import os
 import torch
 import yaml
 import argparse
-import os
 import numpy as np
 from tqdm import tqdm
 from torch.optim import Adam
-from MNIST_dataloader import MnistDataset
+from UNet import UNet
+from MNIST_dataloader import MnistLoader
 from torch.utils.data import DataLoader
-from model.UNet import UNet
-from scheduler.linear_noise_scheduler import LinearNoiseScheduler
+from linear_noise_scheduler import LinearNoiseScheduler
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -31,7 +36,7 @@ def train(args):
         beta_end=diffusion_config["beta_end"],
     )
 
-    mnist = MnistDataset("train", im_path=dataset_config["im_path"])
+    mnist = MnistLoader("train", im_path=dataset_config["im_path"])
     mnist_loader = DataLoader(
         mnist, batch_size=train_config["batch_size"], shuffle=True, num_workers=4
     )
@@ -91,7 +96,7 @@ def train(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Arguments for DDPM training")
     parser.add_argument(
-        "--config", dest="config_path", default="config/default.yaml", type=str
+        "--config", dest="config_path", default="../config/default.yaml", type=str
     )
     args = parser.parse_args()
     train(args)

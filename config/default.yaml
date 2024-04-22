@@ -11,7 +11,7 @@ model_params:
   num_heads : 4
 
 dataset_params:
-  im_path: 'data/train/images'
+  im_path: '../data/mnist_png/train/'
 
 diffusion_params:
   num_timesteps : 1000
