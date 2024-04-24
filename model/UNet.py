@@ -333,7 +333,7 @@ class UNet(nn.Module):
                     self.down_channels[j],
                     self.down_channels[j + 1],
                     self.t_emb_dim,
-                    down_sample=self.down_sample[i],
+                    down_sample=self.down_sample[j],
                     num_layers=self.num_down_layers,
                 )
             )
