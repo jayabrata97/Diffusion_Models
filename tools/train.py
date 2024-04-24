@@ -10,10 +10,10 @@ import argparse
 import numpy as np
 from tqdm import tqdm
 from torch.optim import Adam
-from UNet import UNet
-from MNIST_dataloader import MnistLoader
+from model.UNet import UNet
+from dataset.MNIST_dataloader import MnistLoader
 from torch.utils.data import DataLoader
-from linear_noise_scheduler import LinearNoiseScheduler
+from scheduler.linear_noise_scheduler import LinearNoiseScheduler
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -96,7 +96,7 @@ def train(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Arguments for DDPM training")
     parser.add_argument(
-        "--config", dest="config_path", default="../config/default.yaml", type=str
+        "--config", dest="config_path", default="config/default.yaml", type=str
     )
     args = parser.parse_args()
     train(args)
