@@ -34,9 +34,9 @@ class LinearNoiseScheduler:
             original.device
         )[t].reshape(batch_size)
 
-        for _ in range(len(original.shape[0]) - 1):
+        for _ in range(len(original.shape) - 1):
             sqrt_alpha_cum_prod = sqrt_alpha_cum_prod.unsqueeze(-1)
-        for _ in range(len(original.shape[0]) - 1):
+        for _ in range(len(original.shape) - 1):
             sqrt_one_minus_alpha_cum_prod = sqrt_one_minus_alpha_cum_prod.unsqueeze(-1)
 
         return (
