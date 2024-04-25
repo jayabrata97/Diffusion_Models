@@ -317,6 +317,7 @@ class UNet(nn.Module):
         assert self.mid_channels[-1] == self.down_channels[-2]
         assert len(self.down_sample) == len(self.down_channels) - 1
 
+        # Initial projection from sinusoidal time embedding
         self.t_proj = nn.Sequential(
             nn.Linear(self.t_emb_dim, self.t_emb_dim),
             nn.SiLU(),
@@ -338,7 +339,7 @@ class UNet(nn.Module):
                 )
             )
         self.mids = nn.ModuleList([])
-        for i in range(len(self.down_channels) - 1):
+        for i in range(len(self.mid_channels) - 1):
             self.mids.append(
                 MidBlock(
                     self.mid_channels[i],
@@ -354,7 +355,7 @@ class UNet(nn.Module):
                     self.down_channels[i] * 2,
                     self.down_channels[i - 1] if i != 0 else 16,
                     self.t_emb_dim,
-                    up_sample=self.down_samplr[i],
+                    up_sample=self.down_sample[i],
                     num_layers=self.num_up_layers,
                 )
             )
@@ -362,6 +363,10 @@ class UNet(nn.Module):
         self.conv_out = nn.Conv2d(16, pic_channels, kernel_size=3, padding=1)
 
     def forward(self, x, t):
+        # Shapes assuming downblocks are [C1, C2, C3, C4]
+        # Shapes assuming midblocks are [C4, C4, C3]
+        # Shapes assuming downsamples are [True, True, False]
+        # B x C x H x W
         out = self.conv_in(x)
         t_emb = time_embedding(torch.as_tensor(t).long(), self.t_emb_dim)
         t_emb = self.t_proj(t_emb)

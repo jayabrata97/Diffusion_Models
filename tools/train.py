@@ -67,7 +67,7 @@ def train(args):
             optimizer.zero_grad()
             im = im.float().to(device)
             noise = torch.randn_like(im).to(device)
-            t = torch.randint(0, diffusion_config["nm_timesteps"], (im.shape[0],)).to(
+            t = torch.randint(0, diffusion_config["num_timesteps"], (im.shape[0],)).to(
                 device
             )
 
