@@ -46,7 +46,7 @@ def infer(args):
             print(exc)
         print(config)
 
-    diffusion_config = config["diffudion_params"]
+    diffusion_config = config["diffusion_params"]
     model_config = config["model_params"]
     train_config = config["train_params"]
 
